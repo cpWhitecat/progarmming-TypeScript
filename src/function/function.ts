@@ -24,4 +24,48 @@ function sum2(...arg:Number[]){
                                                             // 我知道箭头函数去掉括号是直接表示返回值；但之前一直没意识到这个问题
 }
 
-function().bind.call.apply//它们好像都会更改this的指向
+function().bind.call.apply//它们都会更改this的指向
+
+
+
+function mapNode<T extends TreeNode>(node:T,f:(value:string)=>string) : T {
+    return {
+        ...node,
+        value :f(node.value)
+    }
+}
+
+type TreeNode = {
+    value:string
+};
+
+type LeafNode = TreeNode & {
+    isLeaf: true
+}
+
+type InnerNode = TreeNode & {
+    children: [TreeNode] | [TreeNode , TreeNode]
+}
+
+let a2 : TreeNode = {value:'a'};
+let b2 : LeafNode = {value:'b' , isLeaf : true};
+let c2 : InnerNode = {value : 'c' , children:[b2]};
+
+let a3 = mapNode(a2,_=>_.toUpperCase())
+
+
+
+function call<T extends any[],U>(
+    f:(...args:T) => U,   //类型String | number 
+    ...args:T,
+):U {
+    return f(...args)
+}
+
+function fill(length:number , value : string) : string[]{
+    return Array.from({length}, ()=>value)
+}
+
+call(fill,10 , 'a')
+
+Function.prototype.call
