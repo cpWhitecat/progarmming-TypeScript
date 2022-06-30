@@ -95,3 +95,64 @@ class Game {
     }
 }
 
+
+
+
+// 类型别名中包含的其他类型别名 不能被interface重写
+// 接口支持泛型
+// 接口里的不区分顺序
+
+
+type interfaceTestA = string;
+interface A<C> {
+    name:C,
+    home:interfaceTestA | number
+}
+
+interface bTest {
+    name:string
+}
+
+interface B {
+    name : bTest
+}
+
+
+
+// 我觉得其实类型别名和接口的差别还是挺大的
+// 抽象的理解
+// 接口不仅限制和规定了传入的类型，还同时保证了值的存在与否
+
+
+interface testC<T extends string,U extends number>{ // <T>后面的继承删掉爷不行 ， 还是会报错
+    name:T,
+    age:U,
+}
+
+interface testC<T extends string> {
+    name:T
+}
+
+
+// 不能合并接口 合并的接口泛型名称数量类型必须一模一样 如：144行例子所示
+
+let aa : testC<string,number> = { //这个接口为什么能用啊 接口合并失败 会执行什么其他策略？ 好像是使用最后一次接口声明的结构  换一下上下顺序试试（用在这的接口提示还是一样的）：不必继续牛角尖下去了
+    name:'cc',
+    age:1
+}
+
+
+
+;
+
+interface testD<T>{
+    age:T
+}
+interface testD<T extends string>{
+    name:T
+};
+
+let bb : testD<string> = {
+    name:'1',
+    age:1
+}

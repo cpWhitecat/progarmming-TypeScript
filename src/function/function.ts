@@ -69,3 +69,7 @@ function fill(length:number , value : string) : string[]{
 call(fill,10 , 'a')
 
 Function.prototype.call
+
+
+
+// 函数签名的重载 就是多个函数签名
