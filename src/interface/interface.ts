@@ -39,16 +39,17 @@ class Position {  //类只能跟接口配合？？？ 后面加不了：
 }
 
 // 棋子信息
+//Priece就是个抽象类 一般有abstract 关键字
 abstract class Priece /* <T>这个泛型主要还是用在反悔系统下 */ {  //abstract这个关键字，不能被创建实例 ， 但可以扩展 例如 继承 extends
     protected position : Position;
     constructor(
-        private readonly color : Color,   //在这边的意思是可以被设置，但之后只能读取不能设置
+        private readonly Ncolor : Color,   //在这边的意思是可以被设置，但之后只能读取不能设置
         private readonly prieceNumber :number, 
         file:prieceFile,
         rank : Rank,
     ){
         this.position = new Position(file,rank) //这就是一个position实例，只有在这个作用域内才能访问Private   //实例化就是new className
-        
+    
     };
 
     moveTo(position:Position,canMoveTo:Boolean){  //
@@ -156,3 +157,81 @@ let bb : testD<string> = {
     name:'1',
     age:1
 }
+
+
+interface Animations {
+    eat(x:string) : void,
+    sleep(t:Date) : void
+
+}
+
+class Animation implements Animations{
+    private readonly AnimationName:string;
+    protected AnimationAge :number;  //protected 不能被这个类的实例访问 ， 需要有个新类继承 和这个类
+    constructor(
+        private readonly age:number, //在构造函数里声明的private readonly 会变成这个类的私有属性
+                                        // 那我还折腾的有点久了
+        private readonly newName:string,
+    ){
+        this.AnimationName = newName;
+        this.AnimationAge = age;
+        console.log(this.age)
+        
+    };
+    eat(x: string): void {
+        console.log(this.AnimationAge)
+    };
+    sleep(t: Date): void {
+        console.log(this.AnimationName)
+    }
+}
+
+let newCat = new Animation(1,'ppp');
+
+// let testNEwcat = newCat.AnimationAge
+
+class cat extends Animation {
+    eat(x: string): void {
+        console.log(super(this.AnimationAge))  //可以正常访问  //super() 就是父级构造方法（只能调用方法）
+    }
+}
+
+
+// interface with type both 声明 一个类
+
+//下列都是可以规范new 一个实例所需类型
+
+type newConstructorType = new(...args:any[]) => {}; //也可以用interface实现
+
+interface newConstructorInterface {
+    ...arg:any[]  //反正也可以定义
+}
+interface newConstructor {
+    new():newConstructorType | newConstructorInterface,   //此为构造方法签名
+
+}
+
+
+interface interfaceFunctionTest{
+//接口不能给函数用。。
+}
+
+function interfaceFunction():T{
+
+}
+
+
+// type 和 interface 可否做并集 &   ❌❌❌
+
+type bothType = {};
+
+interface bothInterface<T> {
+    getvalue():T
+}
+
+class both implements bothInterface<C extends bothType | bothType> {
+    getvalue():C{
+
+    }
+}
+
